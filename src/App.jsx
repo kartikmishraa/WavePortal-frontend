@@ -6,7 +6,7 @@ import "./App.css";
 const App = () => {
   const [currentAccount, setCurrentAccount] = useState("");
   const [allWaves, setAllWaves] = useState([]);
-  const contractAddress = "0x524FaaDf97c1880eECcf457EaE1c5c8d39830be2";
+  const contractAddress = "0x766cD3254908F3253Ea8A0ba5AE1b6e35d740288";
   const contractABI = abi.abi;
 
   const getAllWaves = async () => {
@@ -96,7 +96,9 @@ const App = () => {
         const signer = await provider.getSigner();
         const wavePortalContract = new ethers.Contract(contractAddress, contractABI, signer);
 
-        const waveTxn = await wavePortalContract.wave("Heyy, its kartik :))");
+        let msg = document.getElementById("input-el").value;
+        
+        const waveTxn = await wavePortalContract.wave(msg);
         console.log("Mining...", waveTxn.hash);
 
         await waveTxn.wait();
@@ -143,7 +145,9 @@ const App = () => {
           Kartik here, I have created this frontend to connect to my Smart Contract deployed on the Rinkeby Testnet (Ethereum). 
 <br /> <strong>Go ahead and say hi! </strong>
         </div>
-
+  
+        <input type="text" className="form-txt" id="input-el"/> 
+  
         <button className="waveButton" onClick={wave}>
           Wave at Me
         </button>
