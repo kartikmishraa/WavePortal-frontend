@@ -2,95 +2,44 @@ import React, { useEffect, useState } from "react";
 import { ethers } from "ethers";
 import abi from "./util/WavePortal.json";
 import "./App.css";
+import Header from "./Header";
 
 const App = () => {
+
+  /* Initializing State variables */
   const [currentAccount, setCurrentAccount] = useState("");
   const [allWaves, setAllWaves] = useState([]);
+
+  /* Contract Address & ABI */
   const contractAddress = "0xC43EED7F5345C9542B1dF6C661d6aA2489c41d5D";
   const contractABI = abi.abi;
 
-//   const getAllWaves = async () => {
-//   const { ethereum } = window;
-
-//   try {
-//     if (ethereum) {
-//       const provider = new ethers.providers.Web3Provider(ethereum);
-//       const signer = provider.getSigner();
-//       const wavePortalContract = new ethers.Contract(contractAddress, contractABI, signer);
-//       const waves = await wavePortalContract.getAllWaves();
-
-//       const wavesCleaned = waves.map(wave => {
-//         return {
-//           address: wave.waver,
-//           timestamp: new Date(wave.timestamp * 1000),
-//           message: wave.message,
-//         };
-//       });
-
-//       setAllWaves(wavesCleaned);
-//     } else {
-//       console.log("Ethereum object doesn't exist!");
-//     }
-//   } catch (error) {
-//     console.log(error);
-//   }
-// };
-
-// /**
-//  * Listen in for emitter events!
-//  */
-// useEffect(() => {
-//   let wavePortalContract;
-
-//   const onNewWave = (from, timestamp, message) => {
-//     console.log("NewWave", from, timestamp, message);
-//     setAllWaves(prevState => [
-//       ...prevState,
-//       {
-//         address: from,
-//         timestamp: new Date(timestamp * 1000),
-//         message: message,
-//       },
-//     ]);
-//   };
-
-//   if (window.ethereum) {
-//     const provider = new ethers.providers.Web3Provider(window.ethereum);
-//     const signer = provider.getSigner();
-
-//     wavePortalContract = new ethers.Contract(contractAddress, contractABI, signer);
-//     wavePortalContract.on("NewWave", onNewWave);
-//   }
-
-//   return () => {
-//     if (wavePortalContract) {
-//       wavePortalContract.off("NewWave", onNewWave);
-//     }
-//   };
-// }, []);
-
-
-  // ----------------------------------------------------------------------------
-
   
+  /* getAllWaves Function 
+      Desc: Function to read all waves data from the contract and store 
+            in the state variable allWaves
+  */
   const getAllWaves = async () => {
       const { ethereum } = window;
     
     try {
+      // MetaMask Check
       if (!ethereum) {
         console.log("Get MetaMask!");
         return;
       }
-      
+
+      // Establishing connection with the contract
       const provider = new ethers.providers.Web3Provider(ethereum);
       const signer = await provider.getSigner();
       const wavePortalContract = new ethers.Contract(contractAddress, contractABI, signer);
 
+      // Array of Wave structs are received
       const waves = await wavePortalContract.getAllWaves();
       
-      let wavesCleaned = [];
+      let wavesCleaned = []; // To store a more JS readable data
       for (const wave of waves) {
-        wavesCleaned.push({
+        wavesCleaned.push({    // Pushing objects of wave 
           address: wave.waver,
           timestamp: new Date(wave.timestamp * 1000), 
           message: wave.message
@@ -101,8 +50,9 @@ const App = () => {
     } catch (error) {
       console.log(error);
     }
-  }
+  }  // getAllWaves() ends..
 
+  
   useEffect(() => {
     let wavePortalContract;
 
@@ -232,14 +182,7 @@ const App = () => {
   return (
     <div className="mainContainer">
       <div className="dataContainer">
-        <div className="header">
-        👋 Hey there!
-        </div>
-
-        <div className="bio">
-          Kartik here, I have created this frontend to connect to my Smart Contract deployed on the Rinkeby Testnet (Ethereum). 
-<br /> <strong>Go ahead and say hi! </strong>
-        </div>
+        <Header />
   
         <input type="text" className="form-txt" id="input-el"/> 
   
@@ -257,17 +200,21 @@ const App = () => {
           Show Total Waves
         </button>
 
-        {allWaves.map((wave, index) => {
+        <div className="messages">
+        {
+          allWaves.map((wave, index) => {
           return (
-            <div key={index} style={{ backgroundColor: "OldLace", marginTop: "16px", padding: "8px" }}>
-              <div>Sender's Address: {wave.address}</div>
+            <div key={index} style={{backgroundColor: "OldLace", marginTop: "16px", padding: "8px"}}>
+              <div>Sender: {wave.address}</div>
               <div>Message: {wave.message}</div>
               <div>Time: {wave.timestamp.toString()}</div>
             </div>)
-        })}
+          })
+        }
+        </div> 
       </div>
     </div>
   );
 }
 
-export default App
+export default App;

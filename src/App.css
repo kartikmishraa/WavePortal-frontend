@@ -3,6 +3,8 @@
   justify-content: center;
   width: 100%;
   margin-top: 64px;
+  background: #E3FDFD;
+  padding: 20px 0px;
 }
 
 .dataContainer {
@@ -12,18 +14,6 @@
   max-width: 600px;
 }
 
-.header {
-  text-align: center;
-  font-size: 32px;
-  font-weight: 600;
-}
-
-.bio {
-  text-align: center;
-  color: gray;
-  margin-top: 16px;
-}
-
 .waveButton {
   cursor: pointer;
   margin-top: 16px;
@@ -31,6 +21,7 @@
   border: 0;
   border-radius: 5px;
   width: 100%;
+  background: #DBE2EF;
 }
 
 .form-main {
@@ -38,9 +29,15 @@
 }
 
 .form-txt {
-  background: lime;
+  background: #A6E3E9;
+  text-align: center;
   border: none;
   border-radius: 25px;
   padding: 15px;
   margin-top: 20px;
+}
+
+.messages {
+  font-family: 'Inter', sans-serif;
+  font-weight: 300;
 }

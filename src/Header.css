@@ -1,0 +1,11 @@
+.title {
+  text-align: center;
+  font-size: 32px;
+  font-weight: 600;
+}
+
+.bio {
+  text-align: center;
+  color: #393E46;
+  margin-top: 16px;
+}
