@@ -191,7 +191,7 @@ const App = () => {
         alert(countString);
 
       } else {
-        alert("Ethereum object does not exist!");
+        alert("Get MetaMask!");
       }
     } catch (error) {
       console.log(error);
