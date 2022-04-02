@@ -3,6 +3,7 @@ import { ethers } from "ethers";
 import abi from "./util/WavePortal.json";
 import "./App.css";
 import Header from "./Header";
+import Messages from "./Messages";
 
 const App = () => {
 
@@ -29,9 +30,10 @@ const App = () => {
         return;
       }
 
-      // Establishing connection with the contract
+      // Establishing connection with the wallet
       const provider = new ethers.providers.Web3Provider(ethereum);
       const signer = await provider.getSigner();
+      // Establishing connection with the contract using wallet
       const wavePortalContract = new ethers.Contract(contractAddress, contractABI, signer);
 
       // Array of Wave structs are received
@@ -111,8 +113,9 @@ const App = () => {
     }
   }
 
-  /**
-  * Implement your connectWallet method here
+  /*
+    connectWallet() method 
+    Desc: method to connect to MetaMask wallet
   */
   const connectWallet = async () => {
     try {
@@ -130,41 +133,64 @@ const App = () => {
     } catch (error) {
       console.log(error)
     }
-  }
+  }  // connectWallet() ends..
 
+
+  /*
+    wave() Method
+    Desc: Method to carryout a wave. Establish connection with the contract,
+          and then execute/mine a 'Wave' transaction 
+  */
   const wave = async () => {
     try {
       const { ethereum } = window;
       if (ethereum) {
+        // Establishing connection with the wallet
         const provider = new ethers.providers.Web3Provider(ethereum);
         const signer = await provider.getSigner();
+        // Establishing connection with the contract using wallet
         const wavePortalContract = new ethers.Contract(contractAddress, contractABI, signer);
 
+        // Fetch the message from input box
         const _msg = document.getElementById("input-el").value;
-        
+
+        // Execute wave() on the contract
         const waveTxn = await wavePortalContract.wave(_msg, {gasLimit: 300000});
         console.log("Mining...", waveTxn.hash);
 
+        // Await mining confirmation
         await waveTxn.wait();
         console.log("Mined --", waveTxn.hash);
       }
     } catch (error) {
       console.log(error);
     }
-  }
-  
+  }  // wave() ends..
+
+
+  /*
+    getWaves() Method
+    Desc: Method to read total number of waves from the contract and 
+          display on the screen
+  */
   const getWaves = async () => {
     try {
       const { ethereum } = window;
       if (ethereum) {
+        // Establishing connection with the wallet
         const provider = new ethers.providers.Web3Provider(ethereum);
         const signer = await provider.getSigner();
+        // Establishing connection with the contract using wallet
         const wavePortalContract = new ethers.Contract(contractAddress, contractABI, signer);
 
+        // Calling getTotalWaves() method of the contract 
         const count = await wavePortalContract.getTotalWaves();
         const countNum = count.toNumber();
         const countString = "Total Waves: " + countNum;
+        
+        // Displaying total waves
         alert(countString);
+
       } else {
         alert("Ethereum object does not exist!");
       }
@@ -176,8 +202,6 @@ const App = () => {
   useEffect(() => {
     checkIfWalletIsConnected();
   }, [])
-
-  console.log(allWaves[0]);
 
   return (
     <div className="mainContainer">
@@ -200,7 +224,7 @@ const App = () => {
           Show Total Waves
         </button>
 
-        <div className="messages">
+        {<div className="messages">
         {
           allWaves.map((wave, index) => {
           return (
@@ -211,7 +235,7 @@ const App = () => {
             </div>)
           })
         }
-        </div> 
+        </div>}
       </div>
     </div>
   );
