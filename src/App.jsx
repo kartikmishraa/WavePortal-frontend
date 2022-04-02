@@ -3,7 +3,6 @@ import { ethers } from "ethers";
 import abi from "./util/WavePortal.json";
 import "./App.css";
 import Header from "./Header";
-import Messages from "./Messages";
 
 const App = () => {
 
